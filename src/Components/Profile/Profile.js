@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import basestyle from "../Base.module.css";
+
 const Profile = ({ setUserState, username }) => {
   const [analysisData, setAnalysisData] = useState("");
   const navigate = useNavigate();
@@ -9,27 +10,27 @@ const Profile = ({ setUserState, username }) => {
 
 
   const sendPostRequestWithQueryString = async (pgnString) => {
-    // Encode the pgnString to ensure it's safe to include in a URL
     const encodedPgnString = encodeURIComponent(pgnString);
-    const endpoint = `
-  http://13.201.118.68/app/pgn?pgn_string=${pgnString}`;
+    const endpoint = `http://13.201.118.68/app/pgn?pgn_string=${encodedPgnString}`;
 
     try {
       const response = await fetch(endpoint, {
-        method: 'POST', // Method itself
+        method: 'POST',
         headers: {
-          'Accept': 'application/json', // Indicates client expects JSON response
+          'Accept': 'application/json',
         },
-        // No body is needed since the data is in the URL
       });
 
-      // Wait for the server to respond with some data
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
-      console.log(data.reformated_analysis); // Handle the response data
-      const json_analysis = JSON.parse(data.reformated_analysis)
-      console.log(json_analysis)
+      const json_analysis = JSON.parse(data.reformated_analysis);
+      return json_analysis;
     } catch (error) {
       console.error('Error sending POST request:', error);
+      return null;
     }
   };
 
@@ -39,14 +40,14 @@ const Profile = ({ setUserState, username }) => {
     setAnalysisData(event.target.value);
   };
 
-  const handleSubmit = () => {
-    sendPostRequestWithQueryString(analysisData)
-    // Do something with the analysisData, like sending it to a server
-    // For now, just log it to the console
-    console.log("Analysis data:", analysisData);
-
-    // Redirect to the next analysis component
-    navigate("/analysis");
+  const handleSubmit = async () => {
+    const analysisResult = await sendPostRequestWithQueryString(analysisData);
+    if (analysisResult) {
+      // Pass the analysisResult to the /analysis route as state
+      navigate("/analysis", { state: { analysisResult } });
+    } else {
+      console.error("Failed to get analysis result.");
+    }
   };
 
   return (
