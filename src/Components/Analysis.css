@@ -1,0 +1,78 @@
+ .container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.move {
+  margin-bottom: 5px;
+}
+
+.explanation {
+  font-size: 16px;
+} 
+
+ 
+
+.move-box {
+  cursor: pointer;
+}
+
+.move-box.highlighted {
+  font-weight: bold;
+}
+
+/* .moves-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; 
+} 
+
+.move-box {
+  cursor: pointer;
+  padding: 5px;
+}  */
+.moves-container {
+  display: flex;
+  flex-direction: row; /* Display items vertically */
+  padding: 2px;
+  margin: 2px;
+  align-items: center; /* Center items horizontally */
+}
+
+.move-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  /* margin-bottom: 5px;  */
+  margin: 5px;
+}
+
+.move-box.highlighted {
+  font-weight: bold;
+}
+
